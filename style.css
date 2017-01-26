@@ -1,0 +1,168 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+.container  {
+    width: 110vw;
+    height: 110vh;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+    background: transparent;
+    transform: translate(-8%, -10%);
+}
+
+.background  {
+    background: url(img/sea_bg.jpg);
+    width: 110vw;
+    height: 110vh;
+    background-size: cover;
+    background-position: center center;
+ }
+
+
+.layer div  {
+    position: absolute;
+}
+
+.shark {
+    top: -8px;
+    left: 200px;
+    transform: scale(0.04);
+    animation: slidein 33s infinite;
+}
+
+.shark img {
+    animation: swim 2s infinite;
+    transition: 0.1s;
+}
+
+
+@keyframes swim {
+  0%{   
+    transform: rotateY(0deg);
+    }
+  50% {
+    transform: rotateY(30deg);
+  } 
+  100% {
+    transform: rotateY(0deg);  
+  }
+}
+
+@keyframes slidein {
+  40% {
+    top: -100px;
+    left: -400px;
+    transform: scale(0.07);
+  }
+ 60%{
+    left: -500px;
+    transform: scale(0.1);
+ }
+    
+  100% {
+    left: -500px;
+    transform: scale(0.05);
+  }
+
+}
+
+.many-fish {
+    top: -226px;
+    left: 650px;
+    transform: scale(0.043);
+}
+
+.fish7 {
+    top: 370px;
+    left: -134px;
+    transform: scale(0.4);
+}
+
+.fish-blue-two-1 {
+    top: 496px;
+    left: 784px;
+    transform: scale(0.35);
+}
+
+.fish-blue-two-2 {
+    top: 398px;
+    left: 784px;
+    transform: scale(0.3);
+}
+
+.fish-blue-two-3 {
+    top: 440px;
+    left: 689px;
+    transform: scale(0.3);
+}
+
+.shark-two {
+    top: -82px;
+    left: 200px;
+    transform: scale(0.3);
+}
+
+.fish6 {
+    top: 400px;
+    left: 0;
+    transform: scale(0.2);
+}
+
+.coral-first {
+    top: 410px;
+    left: -416px;
+    transform: scale(0.5)
+}
+
+.coral-second {
+    top: 567px;
+    left: 338px;
+    transform: scale(0.45);
+}
+
+.fish-blue {
+    top: 424px;
+    left: 0;
+    transform: scale(0.2);
+}
+
+.meduza {
+    top: -232px;
+    left: 1110px;
+    transform: scale(0.15);
+}
+
+.meduza2 {
+    top: -182px;
+    left: -292px;
+    transform: scale(0.06);
+}
+
+.meduza3 {
+    top: 410px;
+    left: 320px;
+    transform: scale(0.2);
+}
+
+.fish-blue-one {
+    top: 600px;
+    left: 1120px;
+    transform: scale(0.3);
+}
+
+.fish-blue2 {
+    top: 380px;
+    left: 960px;
+    transform: scale(0.3);
+}
+
+.fish3 {
+    top: 672px;
+    left: 614px;
+    transform: scale(0.45);
+}
+
+
