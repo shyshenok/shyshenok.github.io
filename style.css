@@ -26,7 +26,19 @@ html {
     position: absolute;
 }
 
-.shark {
+.coral-first {
+    top: 410px;
+    left: -416px;
+    transform: scale(0.5)
+}
+
+.coral-second {
+    top: 567px;
+    left: 338px;
+    transform: scale(0.45);
+}
+
+/*.shark {
     top: -8px;
     left: 200px;
     transform: scale(0.04);
@@ -80,17 +92,7 @@ html {
     transform: scale(0.2);
 }
 
-.coral-first {
-    top: 410px;
-    left: -416px;
-    transform: scale(0.5)
-}
 
-.coral-second {
-    top: 567px;
-    left: 338px;
-    transform: scale(0.45);
-}
 
 .fish-blue {
     top: 424px;
@@ -134,4 +136,4 @@ html {
     transform: scale(0.45);
 }
 
-
+*/
