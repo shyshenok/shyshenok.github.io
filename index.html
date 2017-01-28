@@ -12,59 +12,13 @@
  
 <script type="text/javascript">
 	$(function(){
-		$('#scene1').parallax({
-		  calibrationThreshold: 100,
-	      calibrationDelay: 500,
-	      supportDelay: 500,
-		  calibrateX: false,
-		  calibrateY: true,
-		  invertX: false,
-		  invertY: true,
-		  limitX: false,
-		  limitY: 10,
-		  scalarX: 10.0,
-		  scalarY: 10.0,
-		  frictionX: 0.2,
-		  frictionY: 0.8,
-		  originX: 0.0,
-		  originY: 1.0
-		});
+		$('#scene1').parallax();
 	});
 </script>
 	<div class="container">
 		<ul id="scene1" class="scene">
 			<li class="layer" data-depth="0.00">
 				<div class="background" data-depth="0.00"></div>
-			</li>
-			<li class="layer" data-depth="-0.20">
-				<div class="shark">
-					<img id="shark" src="img/shark.png" />
-				</div>
-			</li>
-			<li class="layer" data-depth="0.20">
-				<div class="many-fish">
-					<img src="img/fish10.png" />
-				</div>
-			</li>
-			<li class="layer" data-depth="0.60">
-				<div class="shark-two">
-					<img src="img/shark2.png" />
-				</div>
-			</li>
-			<li class="layer" data-depth="-0.30">
-				<div class="fish7"><img src="img/fish7.png"></div>
-			</li>
-			<li class="layer" data-depth="0.60">
-				<div class="fish-blue-two-1"><img src="img/fish-blue2.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.60">
-				<div class="fish-blue-two-2"><img src="img/fish-blue2.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.60">
-				<div class="fish-blue-two-3"><img src="img/fish-blue2.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.90">
-				<div class="fish6"><img src="img/fish6.png"></div>
 			</li>
 			<li class="layer" data-depth="0.20">
 				<div class="coral-first">
@@ -75,24 +29,6 @@
 				<div class="coral-second">
 					<img src="img/coral2.png" />
 				</div>
-			</li>
-			<li class="layer" data-depth="0.60">
-				<div class="fish-blue"><img src="img/fish-blue.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.20">
-				<div class="meduza"><img src="img/meduza.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.20">
-				<div class="meduza2"><img src="img/meduza3.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.25">
-				<div class="meduza3"><img src="img/meduza4.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.80">
-				<div class="fish-blue-one"><img src="img/fish-blue1.png" alt=""></div>
-			</li>
-			<li class="layer" data-depth="0.40">
-			  <div class="fish3"><img src="img/fish3.png"></div>
 			</li>
 		</ul>
 	</div>

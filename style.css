@@ -38,37 +38,6 @@ html {
     transition: 0.1s;
 }
 
-
-@keyframes swim {
-  0%{   
-    transform: rotateY(0deg);
-    }
-  50% {
-    transform: rotateY(30deg);
-  } 
-  100% {
-    transform: rotateY(0deg);  
-  }
-}
-
-@keyframes slidein {
-  40% {
-    top: -100px;
-    left: -400px;
-    transform: scale(0.07);
-  }
- 60%{
-    left: -500px;
-    transform: scale(0.1);
- }
-    
-  100% {
-    left: -500px;
-    transform: scale(0.05);
-  }
-
-}
-
 .many-fish {
     top: -226px;
     left: 650px;
