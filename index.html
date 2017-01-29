@@ -12,7 +12,20 @@
  
 <script type="text/javascript">
 	$(function(){
-		$('#scene').parallax();
+		$('#scene').parallax({
+		  calibrateX: false,
+		  calibrateY: false,
+		  invertX: false,
+		  invertY: false,
+		  limitX: false,
+		  limitY: false,
+		  scalarX: 5,
+		  scalarY: 5,
+		  frictionX: 0.2,
+		  frictionY: 0.2,
+		  originX: 1.0,
+		  originY: 1.0
+		});
 	});
 </script>
 	<div class="container">

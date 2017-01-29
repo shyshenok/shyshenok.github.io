@@ -21,6 +21,10 @@ html {
     background-position: center center;
  }
 
+.scene {
+    height: 100%;
+    width: 100%;
+}
 
 .layer div  {
     position: absolute;
