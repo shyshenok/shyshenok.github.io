@@ -18,15 +18,19 @@ var WINDOW_HEIGHT = $(window).height();
 
 $(document).ready(function() {
 
-	var scene =  $('#scene');
+	// var scene =  $('#scene');
 
 	for(var i = 0; i < MAX_FISH_COUNT; i++) {
 		var fish = new Fish();
-		fish.generateBrandNewHtml(scene);
+		fish.generateBrandNewHtml('#scene');
 		var onFinishCall = function() {
+		concole.log("onFinishCall Start");
+
 			fish.randomFishInit();
-			fish.invalidateExistingHtml(scene);
-			fish.animateFish(scene, onFinishCall);
+			fish.invalidateExistingHtml('#scene');
+			fish.animateFish('#scene', onFinishCall);
+		console.log("onFinishCall end");
+
 		}
 		fish.animateFish(scene, onFinishCall);
 	}
@@ -69,6 +73,8 @@ function Fish() {
 
 
 	this.invalidateExistingHtml = function(parentElement) {
+		console.log("invalidate HTML Start");
+
 		var liElement = findLiElement(parentElement); 
 		liElement.find("div")
 			.css({
@@ -82,38 +88,45 @@ function Fish() {
 				(this.mirrored ? " scale(-1, 1)" : "") +
 				" rotate(" + this.angle + "deg)",
 			});
+		console.log("invalidate HTML end");
+
 	}
 
 	this.generateBrandNewHtml = function(parentElement) {
-			var imgWrapper = $('<div />', {
-						"class" : "fish",
-						"css" : {
-							"position" : "absolute",
-							"top" : this.y,
-							"left" : this.x
-						}
-					}).append($('<img />', {
-						"src" : this.src,
-						"alt" : "fish",
-						"css" : {
-							"transform": "scale(0.4)" +
-							(this.mirrored ? " scale(-1, 1)" : "") +
-							" rotate(" + this.angle + "deg)",
-						}
-					}));
+		console.log("generate HTML Start");
+		var imgWrapper = $('<div />', {
+					"class" : "fish",
+					"css" : {
+						"position" : "absolute",
+						"top" : this.y,
+						"left" : this.x
+					}
+				}).append($('<img />', {
+					"src" : this.src,
+					"alt" : "fish",
+					"css" : {
+						"transform": "scale(0.4)" +
+						(this.mirrored ? " scale(-1, 1)" : "") +
+						" rotate(" + this.angle + "deg)",
+					}
+				}));
 
-			imgWrapper.hide();
+		imgWrapper.hide();
 
-			$('<li />', {
-					"id" : this.fishId,
-					"class" : "layer",
-					"data-depth" : "1.00"				
-			})
-			.append(imgWrapper)
-			.appendTo(parentElement);
+		$('<li />', {
+				"id" : this.fishId,
+				"class" : "layer",
+				"data-depth" : "1.00"				
+		})
+		.append(imgWrapper)
+		.appendTo(parentElement);
+		console.log("generate HTML end");
+
 	}
 
 	this.animateFish = function(parentElement, onFinish) {
+		console.log("animate HTML Start");
+
 		var dX = randomInt(MIN_DISTANCE, MAX_DISTANCE);
 		var dY = -dX * Math.tan(degToRad(this.angle));
 
@@ -125,6 +138,7 @@ function Fish() {
 
 		var imgWrapper = findLiElement(parentElement).find("div");
 
+		console.log(imgWrapper);
 
 		imgWrapper.fadeIn({
 			duration: FADE_DURATION,
@@ -142,10 +156,12 @@ function Fish() {
 			queue: false,
 			complete: onFinish
 		});
+		console.log("animate HTML end");
+
 	}
 
 	var findLiElement = function(parentElement) {
-		return parentElement.find("#" + this.fishId); 
+		return $(parentElement).find("#" + this.fishId); 
 	}
 }
 
