@@ -1,7 +1,7 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 10;
+var MAX_FISH_COUNT = 2;
 
 var FADE_DURATION = 1500;
 
@@ -20,11 +20,13 @@ $(document).ready(function() {
 
 	// var scene =  $('#scene');
 
+
 	for(var i = 0; i < MAX_FISH_COUNT; i++) {
 		var fish = new Fish();
+		fish.randomFishInit();
 		fish.generateBrandNewHtml('#scene');
 		var onFinishCall = function() {
-		concole.log("onFinishCall Start");
+		console.log("onFinishCall Start");
 
 			fish.randomFishInit();
 			fish.invalidateExistingHtml('#scene');
@@ -52,69 +54,71 @@ function degToRad(deg) {
 }
 
 function Fish() {
-	this.fishId = Date.now();
+	var self = this;
 
-	this.randomFishInit = function() {
+	self.fishId = Date.now();
 
-		this.init(randomInt(0, WINDOW_WIDTH),
+	self.randomFishInit = function() {
+
+		self.init(randomInt(0, WINDOW_WIDTH),
 				  randomInt(0, WINDOW_HEIGHT),
 				  randomInt(-MAX_DIFF_ANGLE, MAX_DIFF_ANGLE),
 				  randomBoolean(),
 				  PICTURES[randomInt(0, PICTURES.length-1)]);		  
 	}
 
-	this.init = function(x, y, angle, mirrored, src) {
-		this.x = x;
-		this.y = y;
-		this.angle = angle < 0 ? 360 + angle : angle;
-		this.mirrored = mirrored;
-		this.src = src;
+	self.init = function(x, y, angle, mirrored, src) {
+		self.x = x;
+		self.y = y;
+		self.angle = angle < 0 ? 360 + angle : angle;
+		self.mirrored = mirrored;
+		self.src = src;
 	}
 
 
-	this.invalidateExistingHtml = function(parentElement) {
+	self.invalidateExistingHtml = function(parentElement) {
 		console.log("invalidate HTML Start");
 
 		var liElement = findLiElement(parentElement); 
 		liElement.find("div")
 			.css({
-				"top": this.y,
-				"left": this.x
+				"top": self.y,
+				"left": self.x
 			});
 		liElement.find("div>img")
-			.attr("src", this.src)
+			.attr("src", self.src)
 			.css({
 				"transform": "scale(0.4)" +
 				(this.mirrored ? " scale(-1, 1)" : "") +
-				" rotate(" + this.angle + "deg)",
+				" rotate(" + self.angle + "deg)",
 			});
 		console.log("invalidate HTML end");
 
 	}
 
-	this.generateBrandNewHtml = function(parentElement) {
-		console.log("generate HTML Start");
+	self.generateBrandNewHtml = function(parentElement) {
+		console.log("generate HTML Start " + ",x " + self.x + " ,y " + self.y + ', src ' + self.src + ", angle " + self.angle + ', mirrored '+ self.mirrored);
 		var imgWrapper = $('<div />', {
 					"class" : "fish",
 					"css" : {
 						"position" : "absolute",
-						"top" : this.y,
-						"left" : this.x
+						"top" : self.y,
+						"left" : self.x
 					}
 				}).append($('<img />', {
-					"src" : this.src,
+					"src" : self.src,
 					"alt" : "fish",
 					"css" : {
 						"transform": "scale(0.4)" +
-						(this.mirrored ? " scale(-1, 1)" : "") +
-						" rotate(" + this.angle + "deg)",
+						(self.mirrored ? " scale(-1, 1)" : "") +
+						" rotate(" + self.angle + "deg)",
 					}
 				}));
 
 		imgWrapper.hide();
 
 		$('<li />', {
-				"id" : this.fishId,
+				"id" : self.fishId,
 				"class" : "layer",
 				"data-depth" : "1.00"				
 		})
@@ -124,13 +128,14 @@ function Fish() {
 
 	}
 
-	this.animateFish = function(parentElement, onFinish) {
-		console.log("animate HTML Start");
+	self.animateFish = function(parentElement, onFinish) {
+		console.log("animate HTML Start " + parentElement);
+		console.log(parentElement)
 
 		var dX = randomInt(MIN_DISTANCE, MAX_DISTANCE);
-		var dY = -dX * Math.tan(degToRad(this.angle));
+		var dY = -dX * Math.tan(degToRad(self.angle));
 
-		if (!this.mirrored) {
+		if (!self.mirrored) {
 			dX *= -1;
 		}
 
@@ -138,7 +143,7 @@ function Fish() {
 
 		var imgWrapper = findLiElement(parentElement).find("div");
 
-		console.log(imgWrapper);
+		console.log(imgWrapper.html());
 
 		imgWrapper.fadeIn({
 			duration: FADE_DURATION,
@@ -160,8 +165,10 @@ function Fish() {
 
 	}
 
+
 	var findLiElement = function(parentElement) {
-		return $(parentElement).find("#" + this.fishId); 
+		console.log(self.fishId);
+		return $(parentElement).find("#" + self.fishId); 
 	}
 }
 
