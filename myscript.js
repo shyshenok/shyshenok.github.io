@@ -1,7 +1,7 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 1;
+var MAX_FISH_COUNT = 10;
 
 var FADE_DURATION = 1500;
 
