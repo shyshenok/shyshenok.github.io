@@ -1,12 +1,12 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 2;
+var MAX_FISH_COUNT = 1;
 
 var FADE_DURATION = 1500;
 
 var MIN_TRANSLATION_DURATION = 6000;
-var MAX_TRANSLATION_DURATION = 8000;
+var MAX_TRANSLATION_DURATION = 10000;
 
 var MAX_DIFF_ANGLE = 35; // degrees 
 
@@ -25,14 +25,11 @@ $(document).ready(function() {
 		var fish = new Fish();
 		fish.randomFishInit();
 		fish.generateBrandNewHtml('#scene');
-		var onFinishCall = function() {
-		console.log("onFinishCall Start");
-
-			fish.randomFishInit();
-			fish.invalidateExistingHtml('#scene');
-			fish.animateFish('#scene', onFinishCall);
-		console.log("onFinishCall end");
-
+		var onFinishCall = function(fishfish) {
+			console.log("onFinishCall " + fishfish.fishId);
+			fishfish.randomFishInit();
+			fishfish.invalidateExistingHtml('#scene');
+			fishfish.animateFish('#scene', onFinishCall);
 		}
 		fish.animateFish(scene, onFinishCall);
 	}
@@ -77,8 +74,7 @@ function Fish() {
 
 
 	self.invalidateExistingHtml = function(parentElement) {
-		console.log("invalidate HTML Start");
-
+		
 		var liElement = findLiElement(parentElement); 
 		liElement.find("div")
 			.css({
@@ -92,12 +88,10 @@ function Fish() {
 				(this.mirrored ? " scale(-1, 1)" : "") +
 				" rotate(" + self.angle + "deg)",
 			});
-		console.log("invalidate HTML end");
 
 	}
 
 	self.generateBrandNewHtml = function(parentElement) {
-		console.log("generate HTML Start " + ",x " + self.x + " ,y " + self.y + ', src ' + self.src + ", angle " + self.angle + ', mirrored '+ self.mirrored);
 		var imgWrapper = $('<div />', {
 					"class" : "fish",
 					"css" : {
@@ -124,13 +118,9 @@ function Fish() {
 		})
 		.append(imgWrapper)
 		.appendTo(parentElement);
-		console.log("generate HTML end");
-
 	}
 
 	self.animateFish = function(parentElement, onFinish) {
-		console.log("animate HTML Start " + parentElement);
-		console.log(parentElement)
 
 		var dX = randomInt(MIN_DISTANCE, MAX_DISTANCE);
 		var dY = -dX * Math.tan(degToRad(self.angle));
@@ -141,17 +131,26 @@ function Fish() {
 
 		var translateDuration = randomInt(MIN_TRANSLATION_DURATION, MAX_TRANSLATION_DURATION);
 
-		var imgWrapper = findLiElement(parentElement).find("div");
+		var findLi = findLiElement(parentElement);
 
-		console.log(imgWrapper.html());
+		var imgWrapper = findLi.find("div");
+
+		console.log("found Li: " + findLi.attr('id'));
 
 		imgWrapper.fadeIn({
 			duration: FADE_DURATION,
+			complete: function() {
+				console.log("fadein complete fishId " + self.fishId);
+			}
 		})
 		.delay(translateDuration - FADE_DURATION*2)
 		.fadeOut({
 			duration: FADE_DURATION,
+			complete: function() {
+				console.log("fadeout complete fishId " + self.fishId);
+			}
 		});
+
 
 		imgWrapper.animate({
 			left : "+="+ dX +"px",
@@ -159,15 +158,15 @@ function Fish() {
 		}, {
 			duration: translateDuration,
 			queue: false,
-			complete: onFinish
+			complete: function() {
+				onFinish(self);
+			}
 		});
-		console.log("animate HTML end");
 
 	}
 
 
 	var findLiElement = function(parentElement) {
-		console.log(self.fishId);
 		return $(parentElement).find("#" + self.fishId); 
 	}
 }
