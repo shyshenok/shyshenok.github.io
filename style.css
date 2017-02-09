@@ -33,13 +33,21 @@ html {
 .coral-first {
     top: 410px;
     left: -416px;
-    transform: scale(0.5)
+    transform: scale(0.5);
 }
 
 .coral-second {
     top: 582px;
     left: 338px;
     transform: scale(0.45);
+}
+
+.coral-wrapper-first {
+    z-index: 30;
+}
+
+.coral-wrapper-second {
+    z-index: 40;
 }
 
 
