@@ -6,7 +6,7 @@ var MAX_FISH_COUNT = 10;
 var FADE_DURATION = 1500;
 
 var MIN_TRANSLATION_DURATION = 6000;
-var MAX_TRANSLATION_DURATION = 10000;
+var MAX_TRANSLATION_DURATION =  10000;
 
 var MAX_DIFF_ANGLE = 35; // degrees 
 
@@ -18,7 +18,7 @@ var WINDOW_HEIGHT = $(window).height();
 var MIN_DATA_DEPTH = 0.20;
 var MAX_DATA_DEPTH = 1.00;
 
-var MIN_SCALE = 0.3;
+var MIN_SCALE = 0.2;
 var MAX_SCALE = 0.55;
 
 $(document).ready(function() {
@@ -37,6 +37,21 @@ $(document).ready(function() {
 	}
 
 	$('#scene').parallax();
+
+	$('body').css({
+		'width' : WINDOW_WIDTH,
+		'height' : WINDOW_HEIGHT
+	});
+
+	$('.container').css({
+		'width' : WINDOW_WIDTH,
+		'height' : WINDOW_HEIGHT
+	});
+
+	$('.background').css({
+		'width' : WINDOW_WIDTH,
+		'height' : WINDOW_HEIGHT,
+	});
 
 });
 
@@ -129,6 +144,7 @@ function Fish() {
 						"transform": "scale(" + scaleFish +")" +
 									(self.mirrored ? " scale(-1, 1)" : "") +
 									" rotate(" + self.angle + "deg)",
+						// "animation" : moveFish + 5 + "s" + "infinite"
 					}
 				}));
 
@@ -180,6 +196,11 @@ function Fish() {
 				onFinish(self);
 			}
 		});
+
+		fishPicture = imgWrapper.find("img");
+		fishPicture.animate({
+
+		})
 
 	}
 

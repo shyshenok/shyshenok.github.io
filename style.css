@@ -1,22 +1,23 @@
-html {
-  height: 100%;
-  width: 100%;
+
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    min-width:  340px;
 }
 
+
 .container  {
-    width: 110vw;
-    height: 110vh;
     overflow: hidden;
     position: relative;
     margin: 0 auto;
     background: transparent;
-    transform: translate(-8%, -10%);
+    height: 100%;
+    width: 100%;
 }
 
 .background  {
     background: url(img/sea_bg.jpg);
-    width: 110vw;
-    height: 110vh;
     background-size: cover;
     background-position: center center;
  }
@@ -24,33 +25,42 @@ html {
 .scene {
     height: 100%;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .layer div  {
     position: absolute;
+    height: 100%;
+    width: 100%;
 }
 
 .coral-first {
-    top: 410px;
-    left: -416px;
     transform: scale(0.5);
 }
 
 .coral-second {
-    top: 582px;
-    left: 338px;
     transform: scale(0.45);
 }
 
 .coral-wrapper-first {
     z-index: 30;
+    
+    left: -2% !important;
+    top: 65% !important;
 }
 
 .coral-wrapper-second {
     z-index: 40;
+    left: 50% !important;
+    top: 83% !important;
 }
 
-
+/*@keyframe moveFish {
+    from {transform: rotateY(0);}
+    to {transform: rotateY(40deg);}
+}
+*/
 
 /*.shark {
     top: -8px;
