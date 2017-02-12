@@ -1,14 +1,14 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 10;
+var MAX_FISH_COUNT = 20;
 
 var FADE_DURATION = 1500;
 
 var MIN_TRANSLATION_DURATION = 6000;
 var MAX_TRANSLATION_DURATION =  10000;
 
-var MAX_DIFF_ANGLE = 35; // degrees 
+var MAX_DIFF_ANGLE = 35; // degrees
 
 var PICTURES = ["img/fish3.png"];
 
@@ -23,41 +23,42 @@ var MAX_SCALE = 0.55;
 
 $(document).ready(function() {
 
-	for(var i = 0; i < MAX_FISH_COUNT; i++) {
-		var fish = new Fish();
+	fishes = [];
+	for(var i = 0; i < MAX_FISH_COUNT; ++i) {
+		fishes.push(new Fish(i));
+	}
+
+	fishes.forEach(function(fish) {
 		fish.randomFishInit();
 		fish.generateBrandNewHtml('#scene');
 		var onFinishCall = function(fishfish) {
 			fishfish.randomFishInit();
 			fishfish.invalidateExistingHtml('#scene');
 			$('#scene').parallax('updateLayers');
-			fishfish.animateFish('#scene', onFinishCall);
+			console.log("Inner: " + fishfish.fishId + ", outer: " + fish.fishId);
+
+			setTimeout(function() {
+				fishfish.animateFish('#scene', onFinishCall);
+			}, 10); // todo: randomize too
 		}
-		fish.animateFish(scene, onFinishCall);
-	}
+		fish.animateFish(scene, onFinishCall); // todo: setTimout and randomize
+	});
 
 	$('#scene').parallax();
 
-	$('body').css({
+	var size = {
 		'width' : WINDOW_WIDTH,
 		'height' : WINDOW_HEIGHT
-	});
+	}
 
-	$('.container').css({
-		'width' : WINDOW_WIDTH,
-		'height' : WINDOW_HEIGHT
-	});
-
-	$('.background').css({
-		'width' : WINDOW_WIDTH,
-		'height' : WINDOW_HEIGHT,
-	});
-
+	$('body').css(size);
+	$('.container').css(size);
+	$('.background').css(size);
 });
 
-function randomInt(from, to)  {  
-    return Math.floor(Math.random() * (to - from + 1)) + from;  
-} 
+function randomInt(from, to)  {
+    return Math.floor(Math.random() * (to - from + 1)) + from;
+}
 
 function randomBoolean() {
 	return Math.random() < 0.5;
@@ -73,10 +74,10 @@ function getPercentBetween(from, to, percent) {
 	return (from + k * to) / (1 + k);
 }
 
-function Fish() {
+function Fish(fishNum) {
 	var self = this;
 
-	self.fishId = Date.now();
+	self.fishId = fishNum.toString();
 
 	self.randomFishInit = function() {
 
@@ -84,7 +85,7 @@ function Fish() {
 				  randomInt(0, WINDOW_HEIGHT),
 				  randomInt(-MAX_DIFF_ANGLE, MAX_DIFF_ANGLE),
 				  randomBoolean(),
-				  PICTURES[randomInt(0, PICTURES.length-1)]);		  
+				  PICTURES[randomInt(0, PICTURES.length-1)]);
 	}
 
 	self.init = function(x, y, angle, mirrored, src) {
@@ -95,16 +96,14 @@ function Fish() {
 		self.src = src;
 	}
 
-
 	self.invalidateExistingHtml = function(parentElement) {
-		
+
 		var percent = randomInt(0, 100);
 		var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
 
 		var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
 
-
-		var liElement = findLiElement(parentElement); 
+		var liElement = findLiElement(parentElement);
 		liElement.attr("data-depth", dataDepthFish);
 		liElement.css({
 			"z-index" : Math.round(dataDepthFish * 100)
@@ -156,7 +155,7 @@ function Fish() {
 				"data-depth" : dataDepthFish,
 				"css" : {
 					"z-index" : Math.round(dataDepthFish * 100)
-				}			
+				}
 		})
 		.append(imgWrapper)
 		.appendTo(parentElement);
@@ -185,7 +184,6 @@ function Fish() {
 			duration: FADE_DURATION,
 		});
 
-
 		imgWrapper.animate({
 			left : "+="+ dX +"px",
 			top : "+="+ dY + "px"
@@ -204,13 +202,7 @@ function Fish() {
 
 	}
 
-
 	var findLiElement = function(parentElement) {
-		return $(parentElement).find("#" + self.fishId); 
+		return $(parentElement).find("#" + self.fishId);
 	}
 }
-
-
-
-
-

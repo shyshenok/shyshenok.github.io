@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>parallax</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="bower_components/jquery/dist/jquery.min.js"></script>
-	
-	
-	<script src="myscript.js"></script>
-	<link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>parallax</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+
+    <script src="myscript.js"></script>
+    <link href="style.css" rel="stylesheet">
 </head>
+
 <body>
-	<div class="container">
-		<ul id="scene" class="scene">
-			<li class="layer" data-depth="0.00">
-				<div class="background" data-depth="0.00"></div>
-			</li>
-			 <li class="layer coral-wrapper-first" data-depth="0.30">
-				<div class="coral-first">
-					<img src="img/coral1.png" />
-				</div>
-			</li>
-			<li class="layer coral-wrapper-second" data-depth="0.30">
-				<div class="coral-second">
-					<img src="img/coral2.png" />
-				</div>
-			</li> 
-		</ul>
-	</div>
-	<script src="bower_components/parallax/deploy/jquery.parallax.js"></script>
+    <div class="container">
+        <ul id="scene" class="scene">
+            <li class="layer" data-depth="0.00">
+                <div class="background" data-depth="0.00"></div>
+            </li>
+            <li class="layer coral-wrapper-first" data-depth="0.30">
+                <div class="coral-first">
+                    <img src="img/coral1.png" />
+                </div>
+            </li>
+            <li class="layer coral-wrapper-second" data-depth="0.30">
+                <div class="coral-second">
+                    <img src="img/coral2.png" />
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script src="bower_components/parallax/deploy/jquery.parallax.js"></script>
 </body>
+
 </html>
