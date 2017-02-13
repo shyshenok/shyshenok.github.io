@@ -19,7 +19,7 @@ var MIN_DATA_DEPTH = 0.20;
 var MAX_DATA_DEPTH = 1.00;
 
 var MIN_SCALE = 0.2;
-var MAX_SCALE = 0.55;
+var MAX_SCALE = 0.53;
 
 $(document).ready(function() {
 
@@ -74,157 +74,137 @@ function getPercentBetween(from, to, percent) {
 	return (from + k * to) / (1 + k);
 }
 
-// function Fish() {
-
-// }
-
-// Fish.prototype.init = function() {
-// 	this.x = x;
-// 		this.y = y;
-// 		self.angle = angle < 0 ? 360 + angle : angle;
-// 		self.mirrored = mirrored;
-// 		self.src = src;
-// }
-
-var obj = {
-	name: "Nastya"
-}
-
-obj.showName = function() {
-	console.log(this.name);
-}
-
-obj.showName();
-
 function Fish(fishNum) {
-	console.log('context', this);
+	this.fishId = fishNum.toString();
+
+}
+
+Fish.findLiElement = function(fish, parentElement) {
+		return $(parentElement).find("#" + fish.fishId);
+}
+
+Fish.prototype.init = function(x, y, angle, mirrored, src) {
+	this.x = x;
+	this.y = y;
+	this.angle = angle < 0 ? 360 + angle : angle;
+	this.mirrored = mirrored;
+	this.src = src;
+}
+
+Fish.prototype.randomFishInit = function() {
+
+	this.init(randomInt(0, WINDOW_WIDTH),
+			  randomInt(0, WINDOW_HEIGHT),
+			  randomInt(-MAX_DIFF_ANGLE, MAX_DIFF_ANGLE),
+			  randomBoolean(),
+			  PICTURES[randomInt(0, PICTURES.length-1)]);
+}
+
+
+Fish.prototype.invalidateExistingHtml = function(parentElement) {
+
+	var percent = randomInt(0, 100);
+	var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
+
+	var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
+
+	var liElement = Fish.findLiElement(this, parentElement);
+	liElement.attr("data-depth", dataDepthFish);
+	liElement.css({
+		"z-index" : Math.round(dataDepthFish * 100)
+	});
+	liElement.find("div")
+		.css({
+			"top": this.y,
+			"left": this.x
+		});
+	liElement.find("div>img")
+		.attr("src", this.src)
+		.css({
+			"transform": "scale(" + scaleFish +")" +
+						(this.mirrored ? " scale(-1, 1)" : "") +
+						" rotate(" + this.angle + "deg)",
+		});
+}
+
+Fish.prototype.generateBrandNewHtml = function(parentElement) {
+
+	var percent = randomInt(0, 100);
+	var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
+
+	var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
+
+	var imgWrapper = $('<div />', {
+				"class" : "fish",
+				"css" : {
+					"position" : "absolute",
+					"top" : this.y,
+					"left" : this.x,
+					"display": "none"
+				}
+			}).append($('<img />', {
+				"src" : this.src,
+				"alt" : "fish",
+				"css" : {
+					"transform": "scale(" + scaleFish +")" +
+								(this.mirrored ? " scale(-1, 1)" : "") +
+								" rotate(" + this.angle + "deg)",
+					// "animation" : moveFish + 5 + "s" + "infinite"
+				}
+			}));
+
+	$('<li />', {
+			"id" : this.fishId,
+			"class" : "layer",
+			"data-depth" : dataDepthFish,
+			"css" : {
+				"z-index" : Math.round(dataDepthFish * 100)
+			}
+	})
+	.append(imgWrapper)
+	.appendTo(parentElement);
+}
+
+Fish.prototype.animateFish = function(parentElement, onFinish) {
+
+	var dX = randomInt(MIN_DISTANCE, MAX_DISTANCE);
+	var dY = -dX * Math.tan(degToRad(this.angle));
+
+	if (!this.mirrored) {
+		dX *= -1;
+	}
+	var translateDuration = randomInt(MIN_TRANSLATION_DURATION, MAX_TRANSLATION_DURATION);
+
+	var findLi = Fish.findLiElement(this, parentElement);
+
+	var imgWrapper = findLi.find("div");
+
+	imgWrapper.fadeIn({
+		duration: FADE_DURATION,
+	})
+	.delay(translateDuration - FADE_DURATION*2)
+	.fadeOut({
+		duration: FADE_DURATION,
+	});
+
 	var self = this;
 
-	self.fishId = fishNum.toString();
-
-	self.randomFishInit = function() {
-
-		self.init(randomInt(0, WINDOW_WIDTH),
-				  randomInt(0, WINDOW_HEIGHT),
-				  randomInt(-MAX_DIFF_ANGLE, MAX_DIFF_ANGLE),
-				  randomBoolean(),
-				  PICTURES[randomInt(0, PICTURES.length-1)]);
-	}
-
-	self.init = function(x, y, angle, mirrored, src) {
-		self.x = x;
-		self.y = y;
-		self.angle = angle < 0 ? 360 + angle : angle;
-		self.mirrored = mirrored;
-		self.src = src;
-	}
-
-	self.invalidateExistingHtml = function(parentElement) {
-
-		var percent = randomInt(0, 100);
-		var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
-
-		var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
-
-		var liElement = findLiElement(parentElement);
-		liElement.attr("data-depth", dataDepthFish);
-		liElement.css({
-			"z-index" : Math.round(dataDepthFish * 100)
-		});
-		liElement.find("div")
-			.css({
-				"top": self.y,
-				"left": self.x
-			});
-		liElement.find("div>img")
-			.attr("src", self.src)
-			.css({
-				"transform": "scale(" + scaleFish +")" +
-							(this.mirrored ? " scale(-1, 1)" : "") +
-							" rotate(" + self.angle + "deg)",
-			});
-	}
-
-	self.generateBrandNewHtml = function(parentElement) {
-
-		var percent = randomInt(0, 100);
-		var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
-
-		var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
-
-		var imgWrapper = $('<div />', {
-					"class" : "fish",
-					"css" : {
-						"position" : "absolute",
-						"top" : self.y,
-						"left" : self.x,
-						"display": "none"
-					}
-				}).append($('<img />', {
-					"src" : self.src,
-					"alt" : "fish",
-					"css" : {
-						"transform": "scale(" + scaleFish +")" +
-									(self.mirrored ? " scale(-1, 1)" : "") +
-									" rotate(" + self.angle + "deg)",
-						// "animation" : moveFish + 5 + "s" + "infinite"
-					}
-				}));
-
-		$('<li />', {
-				"id" : self.fishId,
-				"class" : "layer",
-				"data-depth" : dataDepthFish,
-				"css" : {
-					"z-index" : Math.round(dataDepthFish * 100)
-				}
-		})
-		.append(imgWrapper)
-		.appendTo(parentElement);
-	}
-
-	self.animateFish = function(parentElement, onFinish) {
-
-		var dX = randomInt(MIN_DISTANCE, MAX_DISTANCE);
-		var dY = -dX * Math.tan(degToRad(self.angle));
-
-		if (!self.mirrored) {
-			dX *= -1;
+	imgWrapper.animate({
+		left : "+="+ dX +"px",
+		top : "+="+ dY + "px"
+	}, {
+		duration: translateDuration,
+		queue: false,
+		complete: function() {
+			onFinish(self);
 		}
+	});
 
-		var translateDuration = randomInt(MIN_TRANSLATION_DURATION, MAX_TRANSLATION_DURATION);
+	fishPicture = imgWrapper.find("img");
+	fishPicture.animate({
 
-		var findLi = findLiElement(parentElement);
+	})
 
-		var imgWrapper = findLi.find("div");
-
-		imgWrapper.fadeIn({
-			duration: FADE_DURATION,
-		})
-		.delay(translateDuration - FADE_DURATION*2)
-		.fadeOut({
-			duration: FADE_DURATION,
-		});
-
-		imgWrapper.animate({
-			left : "+="+ dX +"px",
-			top : "+="+ dY + "px"
-		}, {
-			duration: translateDuration,
-			queue: false,
-			complete: function() {
-				onFinish(self);
-			}
-		});
-
-		fishPicture = imgWrapper.find("img");
-		fishPicture.animate({
-
-		})
-
-	}
-
-	var findLiElement = function(parentElement) {
-		return $(parentElement).find("#" + self.fishId);
-	}
 }
+
+
