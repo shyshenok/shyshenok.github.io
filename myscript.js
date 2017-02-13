@@ -1,7 +1,7 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 20;
+var MAX_FISH_COUNT = 10;
 
 var FADE_DURATION = 1500;
 
@@ -21,6 +21,9 @@ var MAX_DATA_DEPTH = 1.00;
 var MIN_SCALE = 0.2;
 var MAX_SCALE = 0.53;
 
+var MIN_DELAY_BEFORE_APPEARANCE = 530;
+var MAX_DELAY_BEFORE_APPEARANCE = 2000;
+
 $(document).ready(function() {
 
 	fishes = [];
@@ -28,23 +31,25 @@ $(document).ready(function() {
 		fishes.push(new Fish(i));
 	}
 
+	var scene = $("#scene");
+
 	fishes.forEach(function(fish) {
 		fish.randomFishInit();
-		fish.generateBrandNewHtml('#scene');
+		fish.generateBrandNewHtml(scene);
 		var onFinishCall = function(fishfish) {
 			fishfish.randomFishInit();
-			fishfish.invalidateExistingHtml('#scene');
-			$('#scene').parallax('updateLayers');
+			fishfish.invalidateExistingHtml(scene);
+			scene.parallax('updateLayers');
 			console.log("Inner: " + fishfish.fishId + ", outer: " + fish.fishId);
 
 			setTimeout(function() {
-				fishfish.animateFish('#scene', onFinishCall);
-			}, 10); // todo: randomize too
+				fishfish.animateFish(scene, onFinishCall);
+			}, randomInt(MIN_DELAY_BEFORE_APPEARANCE, MAX_DELAY_BEFORE_APPEARANCE)); 
 		}
-		fish.animateFish(scene, onFinishCall); // todo: setTimout and randomize
-	});
+		fish.animateFish(scene, onFinishCall); 
+	});	
 
-	$('#scene').parallax();
+	scene.parallax();
 
 	var size = {
 		'width' : WINDOW_WIDTH,
@@ -80,7 +85,7 @@ function Fish(fishNum) {
 }
 
 Fish.findLiElement = function(fish, parentElement) {
-		return $(parentElement).find("#" + fish.fishId);
+		return parentElement.find("#" + fish.fishId);
 }
 
 Fish.prototype.init = function(x, y, angle, mirrored, src) {
@@ -99,7 +104,6 @@ Fish.prototype.randomFishInit = function() {
 			  randomBoolean(),
 			  PICTURES[randomInt(0, PICTURES.length-1)]);
 }
-
 
 Fish.prototype.invalidateExistingHtml = function(parentElement) {
 
@@ -199,12 +203,6 @@ Fish.prototype.animateFish = function(parentElement, onFinish) {
 			onFinish(self);
 		}
 	});
-
-	fishPicture = imgWrapper.find("img");
-	fishPicture.animate({
-
-	})
-
 }
 
 
