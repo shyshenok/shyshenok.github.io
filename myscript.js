@@ -1,7 +1,7 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 20;
+var MAX_FISH_COUNT = 10;
 
 var FADE_DURATION = 1500;
 
@@ -21,6 +21,9 @@ var MAX_DATA_DEPTH = 1.00;
 var MIN_SCALE = 0.2;
 var MAX_SCALE = 0.53;
 
+var MIN_DELAY_BEFORE_APPEARANCE = 530;
+var MAX_DELAY_BEFORE_APPEARANCE = 2000;
+
 $(document).ready(function() {
 
 	fishes = [];
@@ -39,10 +42,12 @@ $(document).ready(function() {
 
 			setTimeout(function() {
 				fishfish.animateFish('#scene', onFinishCall);
-			}, 10); // todo: randomize too
+			}, randomInt(MIN_DELAY_BEFORE_APPEARANCE, MAX_DELAY_BEFORE_APPEARANCE)); 
 		}
-		fish.animateFish(scene, onFinishCall); // todo: setTimout and randomize
-	});
+		setTimeout(function() {
+			fish.animateFish('#scene', onFinishCall); 
+		}, randomInt(MIN_DELAY_BEFORE_APPEARANCE, MAX_DELAY_BEFORE_APPEARANCE)); 
+	});	
 
 	$('#scene').parallax();
 
@@ -199,12 +204,6 @@ Fish.prototype.animateFish = function(parentElement, onFinish) {
 			onFinish(self);
 		}
 	});
-
-	fishPicture = imgWrapper.find("img");
-	fishPicture.animate({
-
-	})
-
 }
 
 

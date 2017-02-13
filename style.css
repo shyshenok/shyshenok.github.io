@@ -109,9 +109,13 @@ body {
     font-family: 'Indie Flower', cursive;
 }
 
-.person-info div h2,
+.person-info div h2 {
+    padding: 16px 30px;
+    font-size: 1.4em;
+}
+
 .person-info div h3 {
-    padding: 4px 30px;
+    padding: 0 30px;
 }
 
 .icon-nav {
