@@ -31,25 +31,25 @@ $(document).ready(function() {
 		fishes.push(new Fish(i));
 	}
 
+	var scene = $("#scene");
+
 	fishes.forEach(function(fish) {
 		fish.randomFishInit();
-		fish.generateBrandNewHtml('#scene');
+		fish.generateBrandNewHtml(scene);
 		var onFinishCall = function(fishfish) {
 			fishfish.randomFishInit();
-			fishfish.invalidateExistingHtml('#scene');
-			$('#scene').parallax('updateLayers');
+			fishfish.invalidateExistingHtml(scene);
+			scene.parallax('updateLayers');
 			console.log("Inner: " + fishfish.fishId + ", outer: " + fish.fishId);
 
 			setTimeout(function() {
-				fishfish.animateFish('#scene', onFinishCall);
+				fishfish.animateFish(scene, onFinishCall);
 			}, randomInt(MIN_DELAY_BEFORE_APPEARANCE, MAX_DELAY_BEFORE_APPEARANCE)); 
 		}
-		setTimeout(function() {
-			fish.animateFish('#scene', onFinishCall); 
-		}, randomInt(MIN_DELAY_BEFORE_APPEARANCE, MAX_DELAY_BEFORE_APPEARANCE)); 
+		fish.animateFish(scene, onFinishCall); 
 	});	
 
-	$('#scene').parallax();
+	scene.parallax();
 
 	var size = {
 		'width' : WINDOW_WIDTH,
@@ -85,7 +85,7 @@ function Fish(fishNum) {
 }
 
 Fish.findLiElement = function(fish, parentElement) {
-		return $(parentElement).find("#" + fish.fishId);
+		return parentElement.find("#" + fish.fishId);
 }
 
 Fish.prototype.init = function(x, y, angle, mirrored, src) {
@@ -104,7 +104,6 @@ Fish.prototype.randomFishInit = function() {
 			  randomBoolean(),
 			  PICTURES[randomInt(0, PICTURES.length-1)]);
 }
-
 
 Fish.prototype.invalidateExistingHtml = function(parentElement) {
 
