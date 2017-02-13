@@ -74,7 +74,30 @@ function getPercentBetween(from, to, percent) {
 	return (from + k * to) / (1 + k);
 }
 
+// function Fish() {
+
+// }
+
+// Fish.prototype.init = function() {
+// 	this.x = x;
+// 		this.y = y;
+// 		self.angle = angle < 0 ? 360 + angle : angle;
+// 		self.mirrored = mirrored;
+// 		self.src = src;
+// }
+
+var obj = {
+	name: "Nastya"
+}
+
+obj.showName = function() {
+	console.log(this.name);
+}
+
+obj.showName();
+
 function Fish(fishNum) {
+	console.log('context', this);
 	var self = this;
 
 	self.fishId = fishNum.toString();
@@ -134,7 +157,8 @@ function Fish(fishNum) {
 					"css" : {
 						"position" : "absolute",
 						"top" : self.y,
-						"left" : self.x
+						"left" : self.x,
+						"display": "none"
 					}
 				}).append($('<img />', {
 					"src" : self.src,
@@ -146,8 +170,6 @@ function Fish(fishNum) {
 						// "animation" : moveFish + 5 + "s" + "infinite"
 					}
 				}));
-
-		imgWrapper.hide();
 
 		$('<li />', {
 				"id" : self.fishId,
