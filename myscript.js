@@ -40,14 +40,12 @@ $(document).ready(function() {
 		fish.generateBrandNewHtml(scene);
 		var onFinishCall = function(fishfish) {
 
-			var fishCopy = Fish.randomCopyFish(fishfish);
-
-			fishCopy.randomFishInit();
-			fishCopy.invalidateExistingHtml(scene);
+			fishfish.randomFishInit();
+			fishfish.invalidateExistingHtml(scene);
 			scene.parallax('updateLayers');
 
 
-			fishCopy.animateFish(scene, onFinishCall); 
+			fishfish.animateFish(scene, onFinishCall); 
 		}
 		fish.animateFish(scene, onFinishCall); 
 	});	
@@ -89,12 +87,6 @@ function Fish(fishNum) {
 	this.fishLi;
 }
 
-Fish.randomCopyFish = function(fish) {
-	var newFish = new Fish(fish.fishId);
-	newFish.randomFishInit();
-	return newFish;
-}
-
 Fish.prototype.init = function(x, y, angle, mirrored, src) {
 	this.x = x;
 	this.y = y;
@@ -129,7 +121,6 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 								" rotate(" + this.angle + "deg)"		
 					}
 				});
-	console.log("fishImgElement " + this.fishImgElement);
 
 	this.fishImgWrapper = $('<div />', {
 				"class" : "fish",
@@ -141,7 +132,6 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 				}
 			}).append(this.fishImgElement);
 
-	console.log("fishImgWrapper " + this.fishImgWrapper);
 	this.fishLi = $('<li />', {
 			"id" : this.fishId,
 			"class" : "layer",
@@ -152,15 +142,9 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 	})
 	.append(this.fishImgWrapper);
 	this.fishLi.appendTo(parentElement);
-	console.log("fishLi " + this.fishLi);
 }
 
 Fish.prototype.invalidateExistingHtml = function(parentElement) {
-
-	console.log("fishImgElement " + this.fishImgElement);
-	console.log("fishImgWrapper " + this.fishImgWrapper);
-	console.log("fishLi " + this.fishLi);
-
 
 	var percent = randomInt(0, 100);
 	var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
