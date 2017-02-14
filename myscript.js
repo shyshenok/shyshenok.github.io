@@ -1,7 +1,7 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 10;
+var MAX_FISH_COUNT = 1;
 
 var FADE_DURATION = 1500;
 
@@ -84,17 +84,15 @@ function getPercentBetween(from, to, percent) {
 
 function Fish(fishNum) {
 	this.fishId = fishNum.toString();
-
+	this.fishImgElement;
+	this.fishImgWrapper;
+	this.fishLi;
 }
 
 Fish.randomCopyFish = function(fish) {
 	var newFish = new Fish(fish.fishId);
 	newFish.randomFishInit();
 	return newFish;
-}
-
-Fish.findLiElement = function(fish, parentElement) {
-	return parentElement.find("#" + fish.fishId);
 }
 
 Fish.prototype.init = function(x, y, angle, mirrored, src) {
@@ -114,32 +112,6 @@ Fish.prototype.randomFishInit = function() {
 			  PICTURES[randomInt(0, PICTURES.length-1)]);
 }
 
-Fish.prototype.invalidateExistingHtml = function(parentElement) {
-
-	var percent = randomInt(0, 100);
-	var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
-
-	var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
-
-	var liElement = Fish.findLiElement(this, parentElement);
-	liElement.attr("data-depth", dataDepthFish);
-	liElement.css({
-		"z-index" : Math.round(dataDepthFish * 100)
-	});
-	liElement.find("div")
-		.css({
-			"top": this.y,
-			"left": this.x
-		});
-	liElement.find("div>img")
-		.attr("src", this.src)
-		.css({
-			"transform": "scale(" + scaleFish +")" +
-						(this.mirrored ? " scale(-1, 1)" : "") +
-						" rotate(" + this.angle + "deg)",
-		});
-}
-
 Fish.prototype.generateBrandNewHtml = function(parentElement) {
 
 	var percent = randomInt(0, 100);
@@ -147,15 +119,7 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 
 	var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
 
-	var imgWrapper = $('<div />', {
-				"class" : "fish",
-				"css" : {
-					"position" : "absolute",
-					"top" : this.y,
-					"left" : this.x,
-					"display": "none"
-				}
-			}).append($('<img />', {
+	this.fishImgElement = $('<img />', {
 				"class" : "img-fish",
 				"src" : this.src,
 				"alt" : "fish",
@@ -163,10 +127,22 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 					"transform": "scale(" + scaleFish +")" +
 								(this.mirrored ? " scale(-1, 1)" : "") +
 								" rotate(" + this.angle + "deg)"		
-				}
-			}));
+					}
+				});
+	console.log("fishImgElement " + this.fishImgElement);
 
-	$('<li />', {
+	this.fishImgWrapper = $('<div />', {
+				"class" : "fish",
+				"css" : {
+					"position" : "absolute",
+					"top" : this.y,
+					"left" : this.x,
+					"display": "none"
+				}
+			}).append(this.fishImgElement);
+
+	console.log("fishImgWrapper " + this.fishImgWrapper);
+	this.fishLi = $('<li />', {
 			"id" : this.fishId,
 			"class" : "layer",
 			"data-depth" : dataDepthFish,
@@ -174,8 +150,39 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 				"z-index" : Math.round(dataDepthFish * 100)
 			}
 	})
-	.append(imgWrapper)
-	.appendTo(parentElement);
+	.append(this.fishImgWrapper);
+	this.fishLi.appendTo(parentElement);
+	console.log("fishLi " + this.fishLi);
+}
+
+Fish.prototype.invalidateExistingHtml = function(parentElement) {
+
+	console.log("fishImgElement " + this.fishImgElement);
+	console.log("fishImgWrapper " + this.fishImgWrapper);
+	console.log("fishLi " + this.fishLi);
+
+
+	var percent = randomInt(0, 100);
+	var scaleFish = getPercentBetween(MIN_SCALE,MAX_SCALE,percent);
+
+	var dataDepthFish = getPercentBetween(MIN_DATA_DEPTH, MAX_DATA_DEPTH, percent);
+
+	this.fishLi.attr("data-depth", dataDepthFish);
+	this.fishLi.css({
+		"z-index" : Math.round(dataDepthFish * 100)
+	});
+	this.fishImgWrapper
+		.css({
+			"top": this.y,
+			"left": this.x
+		});
+	this.fishImgElement
+		.attr("src", this.src)
+		.css({
+			"transform": "scale(" + scaleFish +")" +
+						(this.mirrored ? " scale(-1, 1)" : "") +
+						" rotate(" + this.angle + "deg)",
+		});
 }
 
 Fish.prototype.animateFish = function(parentElement, onFinish) {
@@ -188,24 +195,17 @@ Fish.prototype.animateFish = function(parentElement, onFinish) {
 	}
 	var translateDuration = randomInt(MIN_TRANSLATION_DURATION, MAX_TRANSLATION_DURATION);
 
-	var findLi = Fish.findLiElement(this, parentElement);
-
-	var imgWrapper = findLi.find("div");
-
 	var self = this;
 
-	imgWrapper.fadeIn({
+	this.fishImgWrapper.fadeIn({
 		duration: FADE_DURATION,
 	})
 	.delay(translateDuration - FADE_DURATION*2)
 	.fadeOut({
 		duration: FADE_DURATION,
-		start: function() {
-			console.log(self.fish);
-		}
 	});
 
-	imgWrapper.animate({
+	this.fishImgWrapper.animate({
 		left : "+="+ dX +"px",
 		top : "+="+ dY + "px"
 	}, {
