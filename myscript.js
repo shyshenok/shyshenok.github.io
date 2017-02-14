@@ -1,7 +1,7 @@
 var MIN_DISTANCE = 400;
 var MAX_DISTANCE = 700;
 
-var MAX_FISH_COUNT = 1;
+var MAX_FISH_COUNT = 10;
 
 var FADE_DURATION = 1500;
 
@@ -12,7 +12,8 @@ var MAX_DIFF_ANGLE = 35; // degrees
 
 var PICTURES = ["img/fish13.png"];
 var EASING = ["easeOutSine", "easeInSine" , "easeOutQuad",
-			  "easeOutCubic", "easeInCirc", "easeOutCirc"];
+			  "easeOutCubic", "easeInCirc", "easeOutCirc",
+			  "easeInOutBounce", "easeInBounce", "easeOutBounce"];
 
 var WINDOW_WIDTH = $(window).width();
 var WINDOW_HEIGHT = $(window).height();
@@ -60,6 +61,10 @@ $(document).ready(function() {
 	$('body').css(size);
 	$('.container').css(size);
 	$('.background').css(size);
+
+	var supportedFlag = $.keyframe.isSupported();
+	console.log(supportedFlag);
+
 });
 
 function randomInt(from, to)  {
@@ -180,6 +185,23 @@ Fish.prototype.animateFish = function(parentElement, onFinish) {
 	var translateDuration = randomInt(MIN_TRANSLATION_DURATION, MAX_TRANSLATION_DURATION);
 
 	var self = this;
+
+	$.keyframe.define([{
+	    'name': 'new',
+	    '0%': {"transform": "rotateY(0deg)"},
+	    '50%': {"transform": "rotateY(30deg)"},
+	    '100%': {"transform": "rotateY(0deg)"}
+	}]);
+
+	this.fishImgElement.playKeyframe({
+	    name: 'new', // name of the keyframe you want to bind to the selected element
+	    duration: '3s', // [optional, default: 0, in ms] how long you want it to last in milliseconds
+	    timingFunction: 'linear', // [optional, default: ease] specifies the speed curve of the animation
+	    delay: '0s', //[optional, default: 0s]  how long you want to wait before the animation starts
+	    iterationCount: 'infinite', //[optional, default:1]  how many times you want the animation to repeat
+	    direction: 'normal', //[optional, default: 'normal']  which direction you want the frames to flow
+	    fillMode: 'forwards' //[optional] Function fired after the animation is complete. If repeat is infinite, the function will be fired every time the animation is restarted.
+});
 
 	this.fishImgWrapper.fadeIn({
 		duration: FADE_DURATION,
