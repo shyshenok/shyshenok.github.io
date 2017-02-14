@@ -10,7 +10,9 @@ var MAX_TRANSLATION_DURATION =  10000;
 
 var MAX_DIFF_ANGLE = 35; // degrees
 
-var PICTURES = ["img/fish3.png"];
+var PICTURES = ["img/fish13.png"];
+var EASING = ["easeOutSine", "easeInSine" , "easeOutQuad",
+			  "easeOutCubic", "easeInCirc", "easeOutCirc"];
 
 var WINDOW_WIDTH = $(window).width();
 var WINDOW_HEIGHT = $(window).height();
@@ -21,7 +23,7 @@ var MAX_DATA_DEPTH = 1.00;
 var MIN_SCALE = 0.2;
 var MAX_SCALE = 0.53;
 
-var MIN_DELAY_BEFORE_APPEARANCE = 530;
+var MIN_DELAY_BEFORE_APPEARANCE = 500;
 var MAX_DELAY_BEFORE_APPEARANCE = 2000;
 
 $(document).ready(function() {
@@ -37,14 +39,15 @@ $(document).ready(function() {
 		fish.randomFishInit();
 		fish.generateBrandNewHtml(scene);
 		var onFinishCall = function(fishfish) {
-			fishfish.randomFishInit();
-			fishfish.invalidateExistingHtml(scene);
-			scene.parallax('updateLayers');
-			console.log("Inner: " + fishfish.fishId + ", outer: " + fish.fishId);
 
-			setTimeout(function() {
-				fishfish.animateFish(scene, onFinishCall);
-			}, randomInt(MIN_DELAY_BEFORE_APPEARANCE, MAX_DELAY_BEFORE_APPEARANCE)); 
+			var fishCopy = Fish.randomCopyFish(fishfish);
+
+			fishCopy.randomFishInit();
+			fishCopy.invalidateExistingHtml(scene);
+			scene.parallax('updateLayers');
+
+
+			fishCopy.animateFish(scene, onFinishCall); 
 		}
 		fish.animateFish(scene, onFinishCall); 
 	});	
@@ -84,8 +87,14 @@ function Fish(fishNum) {
 
 }
 
+Fish.randomCopyFish = function(fish) {
+	var newFish = new Fish(fish.fishId);
+	newFish.randomFishInit();
+	return newFish;
+}
+
 Fish.findLiElement = function(fish, parentElement) {
-		return parentElement.find("#" + fish.fishId);
+	return parentElement.find("#" + fish.fishId);
 }
 
 Fish.prototype.init = function(x, y, angle, mirrored, src) {
@@ -147,13 +156,13 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 					"display": "none"
 				}
 			}).append($('<img />', {
+				"class" : "img-fish",
 				"src" : this.src,
 				"alt" : "fish",
 				"css" : {
 					"transform": "scale(" + scaleFish +")" +
 								(this.mirrored ? " scale(-1, 1)" : "") +
-								" rotate(" + this.angle + "deg)",
-					// "animation" : moveFish + 5 + "s" + "infinite"
+								" rotate(" + this.angle + "deg)"		
 				}
 			}));
 
@@ -172,7 +181,7 @@ Fish.prototype.generateBrandNewHtml = function(parentElement) {
 Fish.prototype.animateFish = function(parentElement, onFinish) {
 
 	var dX = randomInt(MIN_DISTANCE, MAX_DISTANCE);
-	var dY = -dX * Math.tan(degToRad(this.angle));
+	var dY = -dX * Math.tan(degToRad(this.angle));	
 
 	if (!this.mirrored) {
 		dX *= -1;
@@ -183,26 +192,33 @@ Fish.prototype.animateFish = function(parentElement, onFinish) {
 
 	var imgWrapper = findLi.find("div");
 
+	var self = this;
+
 	imgWrapper.fadeIn({
 		duration: FADE_DURATION,
 	})
 	.delay(translateDuration - FADE_DURATION*2)
 	.fadeOut({
 		duration: FADE_DURATION,
+		start: function() {
+			console.log(self.fish);
+		}
 	});
-
-	var self = this;
 
 	imgWrapper.animate({
 		left : "+="+ dX +"px",
 		top : "+="+ dY + "px"
 	}, {
 		duration: translateDuration,
+		easing : EASING[randomInt(0, EASING.length-1)],
 		queue: false,
 		complete: function() {
 			onFinish(self);
 		}
 	});
+
+
+	
 }
 
 
